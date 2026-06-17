@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 0 0% 91%;
+
+    --card: 222 47% 9%;
+    --card-foreground: 0 0% 91%;
+
+    --popover: 222 47% 9%;
+    --popover-foreground: 0 0% 91%;
+
+    --primary: 16 100% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 175 100% 35%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 222 30% 14%;
+    --muted-foreground: 215 16% 65%;
+
+    --accent: 175 100% 35%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 16 100% 60%;
+
+    --radius: 0.5rem;
+
+    --navy: 222 47% 11%;
+    --navy-deep: 222 47% 6%;
+    --orange: 16 100% 60%;
+    --teal: 175 100% 35%;
+
+    --gradient-mesh: radial-gradient(at 20% 20%, hsl(16 100% 60% / 0.25) 0px, transparent 50%),
+                     radial-gradient(at 80% 0%, hsl(175 100% 35% / 0.25) 0px, transparent 50%),
+                     radial-gradient(at 0% 100%, hsl(16 100% 60% / 0.15) 0px, transparent 50%),
+                     radial-gradient(at 80% 80%, hsl(175 100% 35% / 0.2) 0px, transparent 50%);
+    --gradient-primary: linear-gradient(135deg, hsl(16 100% 60%), hsl(16 100% 50%));
+    --gradient-card: linear-gradient(145deg, hsl(222 47% 10%), hsl(222 47% 7%));
+
+    --shadow-glow-orange: 0 0 30px hsl(16 100% 60% / 0.4);
+    --shadow-glow-teal: 0 0 25px hsl(175 100% 35% / 0.35);
+    --shadow-card: 0 10px 30px -10px hsl(222 47% 0% / 0.6);
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 0 0% 91%;
+    --sidebar-primary: 16 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 30% 14%;
+    --sidebar-accent-foreground: 0 0% 91%;
+    --sidebar-border: 222 30% 18%;
+    --sidebar-ring: 16 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    background-image: radial-gradient(circle at 50% -20%, hsl(16 100% 60% / 0.08), transparent 60%);
+    background-attachment: fixed;
+  }
+  h1, h2, h3, h4, h5, h6 { @apply font-display; }
+  code, pre { @apply font-mono; }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background border-l border-border;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full border-[2px] border-solid border-background transition-colors;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/80;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/70 backdrop-blur-xl border border-border rounded-xl;
+  }
+  .course-card {
+    @apply bg-card border border-border rounded-xl overflow-hidden transition-all duration-300;
+  }
+  .course-card:hover {
+    @apply border-secondary;
+    transform: scale(1.02);
+    box-shadow: var(--shadow-glow-teal);
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-medium px-6 py-3 rounded-lg transition-all duration-300 hover:shadow-[0_0_25px_hsl(16_100%_60%/0.6)] hover:-translate-y-0.5;
+  }
+  .btn-outline-teal {
+    @apply inline-flex items-center justify-center gap-2 border-2 border-secondary text-secondary font-medium px-6 py-3 rounded-lg transition-all duration-300 hover:bg-secondary hover:text-secondary-foreground;
+  }
+  .stat-pill {
+    @apply flex items-center gap-2 px-4 py-2 rounded-full bg-muted/50 border border-border text-sm;
+  }
+  .gradient-mesh-bg {
+    background: var(--gradient-mesh);
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  .animate-float-delay {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+  .animate-mesh {
+    animation: mesh 20s ease infinite;
+    background-size: 200% 200%;
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+@keyframes mesh {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}

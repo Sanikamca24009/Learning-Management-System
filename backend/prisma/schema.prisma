@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  user
+  intern
+  instructor
+  admin
+}
+
+enum EnrollmentStatus {
+  active
+  completed
+  dropped
+}
+
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        Role         @default(user)
+  status      String       @default("pending") // pending, approved, rejected, suspended
+  bio         String?
+  avatar      String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  courses     Course[]     @relation("InstructorCourses")
+  enrollments Enrollment[]
+  lessonRatings LessonRating[]
+}
+
+model Course {
+  id               String       @id @default(cuid())
+  title            String
+  description      String
+  category         String
+  level            String       @default("Beginner")
+  price            Float        @default(0)
+  thumbnail        String?
+  instructorId     String
+  status           String       @default("pending") // pending, approved, rejected
+  instructor       User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  lessons     Lesson[]
+  enrollments Enrollment[]
+}
+
+model Lesson {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  videoUrl  String?
+  order     Int
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  completedBy Enrollment[] @relation("CompletedLessons")
+  ratings     LessonRating[]
+}
+
+model Enrollment {
+  id                String           @id @default(cuid())
+  userId            String
+  courseId          String
+  progress          Int              @default(0)
+  status            EnrollmentStatus @default(active)
+  certificateStatus String           @default("none") // none | requested | approved | rejected
+  mentor            String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course           Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  completedLessons Lesson[] @relation("CompletedLessons")
+
+  @@unique([userId, courseId]) // Prevent duplicate enrollments
+}
+
+model LessonRating {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  rating    Int
+  feedback  String?
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
